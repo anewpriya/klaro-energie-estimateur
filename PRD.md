@@ -137,7 +137,7 @@ The goal of this prototype is to demonstrate product thinking, scope judgment, a
 
 ## Live prototype
 
-[→ View the working prototype](https://votre-username.github.io/klaro-energie-estimateur/)
+[→ View the working prototype](https://anewpriya.github.io/klaro-energie-estimateur/)
 
 ---
 
