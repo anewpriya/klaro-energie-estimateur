@@ -2,7 +2,7 @@
 
 A **product prototype** built as part of a Junior Product Manager application at [Klaro](https://www.klaro.fr).
 
-→ **[View the live prototype](https://votre-username.github.io/klaro-energie-estimateur/)**  
+→ **[View the live prototype](https://anewpriya.github.io/klaro-energie-estimateur/)**  
 → **[Read the full PRD](./PRD.md)**
 
 ---
