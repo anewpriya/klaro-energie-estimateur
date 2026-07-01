@@ -23,7 +23,7 @@ The tool UI is in French because that's the language of the end user. The docume
 
 ## Why this scope
 
-Klaro publicly announced in 2025–2026 an expansion into recurring bill reduction (energy, telecoms, insurance), currently in internal testing. This prototype targets that new product surface rather than the existing employee benefits flow, which is already mature and complex (3,000+ national and local benefits with multi-variable eligibility logic).
+Klaro launched a bill-reduction comparator (energy, telecoms, insurance) as part of their platform in late 2025. This prototype explores the underlying eligibility logic for the energy module, specifically how contract comparison and chèque énergie detection could work together in a single transparent, non-brokered flow.
 
 Scope was deliberately kept narrow to stay honest: no live supplier API connections, no subscription flow. The goal is the investigation decision — "is it worth looking into my contract?" — not the quote itself.
 
