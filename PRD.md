@@ -11,7 +11,7 @@
 
 Klaro helps French employees access financial benefits they are legally entitled to but never claim — the non-recours problem. In 2025–2026, Klaro expanded its mission beyond workplace perks to include reduction of recurring household bills: energy, telecoms, and insurance.
 
-This prototype targets that new product surface directly. It exists to answer a concrete product question:
+This prototype explores the decision logic behind Klaro's energy comparison feature, specifically how a transparent, non-brokered eligibility model combining regulated tariff comparison and chèque énergie detection could work in a single user flow. It exists to answer a concrete product question:
 
 > **How can Klaro help a user quickly understand whether their energy bill is optimised — and whether they're receiving every benefit they're entitled to — without replacing a human advisor or acting as a commercial broker?**
 
