@@ -11,6 +11,8 @@ A **product prototype** built as part of a Junior Product Manager application at
 
 A standalone web tool that helps a Klaro user answer one question in under 2 minutes: *"Am I losing money on my energy bill?"*
 
+![Klaro Energy Savings Estimator - Prototype Interface](Klaro.jpg)
+
 It covers two distinct angles:
 
 1. **Contract comparison** — estimates the gap between the user's current regulated tariff (TRV EDF, CRE reference June 2026) and competitive market offers, based on their consumption profile.
