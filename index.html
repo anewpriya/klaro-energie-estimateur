@@ -95,7 +95,7 @@
   }
   .row2{
     display:grid;
-    grid-template-columns:1fr 1fr;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
     gap:16px;
   }
   .chiprow{
@@ -229,6 +229,9 @@
     border-radius:6px;
     margin-bottom:8px;
   }
+  @media(max-width:480px){.wrap{padding:24px 14px 48px}.card,.verdict-card{padding:20px 16px}.row2{grid-template-columns:minmax(0,1fr)}.line-item{flex-wrap:wrap}.li-left{min-width:0}.verdict-amount{font-size:32px}}
+  .btn-link{display:block;text-decoration:none;text-align:center}
+  :focus-visible{outline:3px solid var(--green);outline-offset:3px}
 </style>
 </head>
 <body>
@@ -238,10 +241,11 @@
   <h1>Ta facture d'énergie cache peut-être un gain.</h1>
   <p class="lede">Réponds à 5 questions. On regarde si tu es éligible au chèque énergie et si ton contrat actuel te coûte plus cher que nécessaire.</p>
 
-  <div class="card" id="formCard">
+  <form class="card" id="formCard">
     <div class="field">
       <label for="contractType">Quel est ton contrat d'électricité aujourd'hui ?</label>
-      <select id="contractType">
+      <select id="contractType" required>
+        <option value="" disabled selected>Choisis ton contrat</option>
         <option value="regulated">Tarif réglementé (Tarif Bleu EDF)</option>
         <option value="market">Offre de marché (autre fournisseur)</option>
         <option value="unknown">Je ne sais pas</option>
@@ -250,34 +254,35 @@
 
     <div class="field">
       <label>Comment chauffes-tu ton logement ?</label>
-      <div class="chiprow" id="heatingChips">
-        <button type="button" class="chip" data-val="electric">Électrique</button>
-        <button type="button" class="chip" data-val="gas">Gaz</button>
-        <button type="button" class="chip" data-val="other">Autre / collectif</button>
+      <div class="chiprow" id="heatingChips" role="group" aria-label="Mode de chauffage">
+        <button type="button" class="chip" aria-pressed="false" data-val="electric">Électrique</button>
+        <button type="button" class="chip" aria-pressed="false" data-val="gas">Gaz</button>
+        <button type="button" class="chip" aria-pressed="false" data-val="other">Autre / collectif</button>
       </div>
     </div>
 
     <div class="field">
       <label for="surface">Surface du logement (m²)</label>
-      <input type="number" id="surface" placeholder="Ex. 65" min="10" max="400">
+      <input type="number" id="surface" required step="any" placeholder="Ex. 65" min="10" max="400">
       <p class="hint">Sert à estimer ta consommation si tu ne connais pas ton chiffre exact en kWh.</p>
     </div>
 
     <div class="row2">
       <div class="field">
-        <label for="householdSize">Personnes dans le foyer</label>
-        <input type="number" id="householdSize" placeholder="Ex. 2" min="1" max="10">
+        <label for="householdSize">Personnes dans le foyer fiscal</label>
+        <input type="number" id="householdSize" required step="1" placeholder="Ex. 2" min="1" max="10">
       </div>
       <div class="field">
-        <label for="income">Revenu fiscal de référence (€/an)</label>
-        <input type="number" id="income" placeholder="Ex. 22000" min="0">
+        <label for="income">Revenu fiscal de référence 2024 (€/an)</label>
+        <input type="number" id="income" required step="any" placeholder="Ex. 22000" min="0">
       </div>
     </div>
 
-    <button class="btn" id="calcBtn">Voir mon estimation</button>
-  </div>
+    <p id="formError" role="alert" class="hint"></p>
+    <button type="submit" class="btn" id="calcBtn">Voir mon estimation</button>
+  </form>
 
-  <div id="results">
+  <div id="results" aria-live="polite">
     <div class="verdict-card">
       <div class="verdict-label">Estimation de ton gain potentiel</div>
       <div class="verdict-amount" id="totalAmount">— €/an</div>
@@ -287,16 +292,17 @@
     <div class="breakdown" id="breakdown"></div>
 
     <div class="card cta-card">
-      <p>Klaro ne te vend rien et ne touche pas de commission. La prochaine étape, c'est d'en parler à un conseiller dédié pour vérifier ton éligibilité réelle et lancer les démarches.</p>
-      <button class="btn" style="background:var(--coral)">Parler à un conseiller Klaro</button>
+      <p>Ce prototype ne transmet aucune donnée et ne prend aucun rendez-vous. Vérifie ton droit auprès du service officiel et compare les offres avant toute décision.</p>
+      <a class="btn btn-link" href="https://guichet.chequeenergie.gouv.fr/guichetchq/verifier-mon-eligibilite">Vérifier mon éligibilité (site officiel)</a>
+      <a class="btn btn-link" href="https://comparateur-offres.energie-info.fr/">Comparer les offres (site officiel)</a>
     </div>
 
     <div class="source-note">
       <span class="badge-method">Méthode</span><br>
-      <strong>Tarif réglementé de référence :</strong> 0,194 €/kWh TTC, option Base, compteur 6 kVA, abonnement 187,80 €/an (CRE, juin 2026).<br>
-      <strong>Fourchette d'économie marché :</strong> les offres de marché les plus compétitives descendent sous 0,17 €/kWh — fourchette indicative, pas un devis en temps réel.<br>
-      <strong>Chèque énergie :</strong> seuil d'éligibilité 11 000 €/UC de revenu fiscal de référence, montant de 48 € à 277 €/an selon la composition du foyer (économie.gouv.fr, barème 2026).<br>
-      Ce prototype utilise des données publiques de référence et une logique simplifiée à des fins de démonstration produit — il ne reflète pas un devis personnalisé réel.
+      <strong>Tarif réglementé de référence :</strong> 0,194 €/kWh TTC, option Base, compteur 6 kVA, abonnement 188,24 €/an (CRE, grille du 1er février 2026, référence historique).<br>
+      <strong>Fourchette d'économie marché :</strong> scénario illustratif à 0,17 €/kWh avec abonnement identique ; ce n’est pas une offre actuelle.<br>
+      <strong>Chèque énergie :</strong> seuil strictement inférieur à 11 000 €/UC de revenu fiscal de référence, montant de 48 € à 277 €/an selon la composition du foyer (<a href="https://www.chequeenergie.gouv.fr/beneficiaire/faq">barème officiel</a>).<br>
+      Ce prototype utilise des données publiques de référence et une logique simplifiée à des fins de démonstration produit — il ne reflète pas un devis personnalisé réel. Les tarifs sont historiques. La composition fiscale particulière et les autres conditions administratives doivent être vérifiées. Le chèque peut déjà avoir été attribué.
     </div>
   </div>
 
@@ -304,110 +310,49 @@
 
 <script>
 let selectedHeating = null;
-document.querySelectorAll('#heatingChips .chip').forEach(chip=>{
-  chip.addEventListener('click', ()=>{
-    document.querySelectorAll('#heatingChips .chip').forEach(c=>c.classList.remove('active'));
-    chip.classList.add('active');
+const $ = id => document.getElementById(id);
+document.querySelectorAll('#heatingChips .chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('#heatingChips .chip').forEach(c => {
+      c.classList.toggle('active', c === chip);
+      c.setAttribute('aria-pressed', String(c === chip));
+    });
     selectedHeating = chip.dataset.val;
+    $('formError').textContent = '';
+    $('results').style.display = 'none';
   });
 });
-
-function fmt(n){
-  return Math.round(n).toLocaleString('fr-FR');
-}
-
+function fmt(n){return Math.round(n).toLocaleString('fr-FR')}
 function calcUC(size){
-  size = Math.max(1, parseInt(size) || 1);
-  if(size === 1) return 1;
-  if(size === 2) return 1.5;
-  return 1.5 + (size - 2) * 0.3;
+  if(!Number.isInteger(size)||size<1||size>10) throw new RangeError('Invalid household size');
+  return size===1?1:1.5+(size-2)*0.3;
 }
-
-function chequeEnergieAmount(rfrPerUC){
-  if(rfrPerUC <= 5700) return 277;
-  if(rfrPerUC <= 7850) return 194;
-  if(rfrPerUC <= 11000) return 153;
-  return 0;
+function chequeEnergieAmount(rfrPerUC,uc){
+  if(!Number.isFinite(rfrPerUC)||rfrPerUC<0||!Number.isFinite(uc)||uc<1) throw new RangeError('Invalid income or UC');
+  if(rfrPerUC>=11000)return 0;
+  const band=rfrPerUC<5700?0:rfrPerUC<6800?1:rfrPerUC<7850?2:3;
+  return (uc===1?[194,146,98,48]:uc<2?[240,176,113,63]:[277,202,126,76])[band];
 }
-
-document.getElementById('calcBtn').addEventListener('click', ()=>{
-  const contractType = document.getElementById('contractType').value;
-  const surface = parseFloat(document.getElementById('surface').value) || 65;
-  const householdSize = parseInt(document.getElementById('householdSize').value) || 1;
-  const income = parseFloat(document.getElementById('income').value) || 0;
-  const heating = selectedHeating || 'other';
-
-  let kwhPerSqm = heating === 'electric' ? 130 : (heating === 'gas' ? 70 : 90);
-  let estConsumption = Math.max(1500, Math.round(surface * kwhPerSqm));
-
-  const regulatedRate = 0.194;
-  const subscription = 187.80;
-  const estimatedBill = estConsumption * regulatedRate + subscription;
-
-  const marketRateLow = 0.17;
-  const marketBillLow = estConsumption * marketRateLow + subscription;
-  const contractSaving = Math.max(0, estimatedBill - marketBillLow);
-
-  const uc = calcUC(householdSize);
-  const rfrPerUC = income > 0 ? income / uc : 999999;
-  const eligible = rfrPerUC <= 11000;
-  const chequeAmount = eligible ? chequeEnergieAmount(rfrPerUC) : 0;
-
-  let showContractSaving = contractType !== 'market';
-  let total = (showContractSaving ? contractSaving : 0) + chequeAmount;
-
-  document.getElementById('totalAmount').textContent = fmt(total) + ' €/an';
-
-  let subText = '';
-  if(total === 0){
-    subText = "D'après ce que tu as indiqué, ton contrat semble déjà compétitif et tu ne sembles pas éligible au chèque énergie cette année. Un conseiller peut quand même vérifier s'il existe d'autres aides adaptées à ta situation.";
-  } else if(eligible && showContractSaving){
-    subText = "Ce montant combine un chèque énergie auquel tu sembles éligible et une économie possible sur ton contrat actuel.";
-  } else if(eligible){
-    subText = "Tu sembles éligible au chèque énergie d'après ton revenu fiscal de référence.";
-  } else {
-    subText = "Cette estimation porte uniquement sur ton contrat d'énergie actuel.";
-  }
-  document.getElementById('verdictSub').textContent = subText;
-
-  let html = '';
-
-  if(showContractSaving){
-    html += `
-      <div class="line-item">
-        <div class="li-left">
-          <div class="li-title">Contrat d'énergie</div>
-          <div class="li-desc">Sur la base d'une consommation estimée de ${fmt(estConsumption)} kWh/an, ton contrat actuel pourrait te coûter plus cher qu'une offre de marché compétitive.</div>
-        </div>
-        <div class="li-amount">${contractSaving > 0 ? '~' + fmt(contractSaving) + ' €' : '0 €'}</div>
-      </div>`;
-  } else {
-    html += `
-      <div class="line-item">
-        <div class="li-left">
-          <div class="li-title">Contrat d'énergie</div>
-          <div class="li-desc">Tu es déjà sur une offre de marché — on ne peut pas estimer un gain sans connaître ton tarif exact. Un conseiller peut comparer ton contrat réel.</div>
-        </div>
-        <div class="li-amount muted">à vérifier</div>
-      </div>`;
-  }
-
-  html += `
-    <div class="line-item coral">
-      <div class="li-left">
-        <div class="li-title">Chèque énergie</div>
-        <div class="li-desc">${eligible
-          ? `Ton revenu fiscal de référence rapporté à ${uc} unité(s) de consommation (${fmt(rfrPerUC)} €/UC) est sous le seuil de 11 000 €.`
-          : income > 0
-            ? `Ton revenu fiscal de référence rapporté à ${uc} unité(s) de consommation (${fmt(rfrPerUC)} €/UC) dépasse le seuil de 11 000 €.`
-            : "Renseigne ton revenu fiscal de référence pour vérifier ton éligibilité."}</div>
-      </div>
-      <div class="li-amount coral-text">${eligible ? fmt(chequeAmount) + ' €' : '0 €'}</div>
-    </div>`;
-
-  document.getElementById('breakdown').innerHTML = html;
-  document.getElementById('results').style.display = 'block';
-  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
+function estimate({contractType,surface,householdSize,income,heating}){
+  if(!['regulated','market','unknown'].includes(contractType)||!['electric','gas','other'].includes(heating)||!Number.isFinite(surface)||surface<10||surface>400||!Number.isFinite(income)||income<0)throw new RangeError('Invalid input');
+  const uc=calcUC(householdSize),rfrPerUC=income/uc;
+  const estConsumption=Math.max(1500,Math.round(surface*({electric:130,gas:70,other:90}[heating])));
+  const contractSaving=contractType==='regulated'?estConsumption*(.194-.17):null;
+  const chequeAmount=chequeEnergieAmount(rfrPerUC,uc);
+  return {uc,rfrPerUC,estConsumption,contractSaving,chequeAmount,total:(contractSaving??0)+chequeAmount};
+}
+$('formCard').addEventListener('input',()=>{$('results').style.display='none'});
+$('formCard').addEventListener('submit',e=>{
+  e.preventDefault();
+  if(!selectedHeating){$('formError').textContent='Choisis un mode de chauffage.';return}
+  const result=estimate({contractType:$('contractType').value,surface:$('surface').valueAsNumber,householdSize:$('householdSize').valueAsNumber,income:$('income').valueAsNumber,heating:selectedHeating});
+  const {uc,rfrPerUC,estConsumption,contractSaving,chequeAmount,total}=result;
+  $('totalAmount').textContent=contractSaving===null?(chequeAmount?fmt(chequeAmount)+' € d’aide potentielle':'À vérifier'):fmt(total)+' €/an';
+  $('verdictSub').textContent=contractSaving===null?'Économie sur le contrat non estimable sans connaître ton tarif. Le montant de l’aide est indicatif.':'Scénario historique : économie de contrat et aide potentielle. Aucun gain garanti ; l’aide peut déjà avoir été reçue.';
+  $('breakdown').innerHTML=`<div class="line-item"><div class="li-left"><div class="li-title">Contrat d’énergie</div><div class="li-desc">${contractSaving===null?'Vérifie le tarif de ton contrat et compare les offres actuelles.': 'Scénario historique pour '+fmt(estConsumption)+' kWh/an, abonnement identique.'}</div></div><div class="li-amount">${contractSaving===null?'À vérifier':'~'+fmt(contractSaving)+' €'}</div></div>
+  <div class="line-item coral"><div class="li-left"><div class="li-title">Chèque énergie</div><div class="li-desc">RFR estimé : ${fmt(rfrPerUC)} €/UC ( ${uc.toLocaleString('fr-FR')} UC). ${chequeAmount?'Sous le seuil de revenu ; autres conditions à vérifier.':'Seuil de revenu non satisfait.'}</div></div><div class="li-amount coral-text">${fmt(chequeAmount)} €</div></div>`;
+  $('results').style.display='block';
+  $('results').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});
 });
 </script>
 </body>

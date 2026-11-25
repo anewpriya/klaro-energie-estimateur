@@ -1,77 +1,22 @@
 # Klaro — Energy Savings Estimator
 
-A **product prototype** built as part of a Junior Product Manager application at [Klaro](https://www.klaro.fr).
+Independent product prototype created for a Junior Product Manager application. French UI, English documentation.
 
-→ **[View the live prototype](https://anewpriya.github.io/klaro-energie-estimateur/)**  
-→ **[Read the full PRD](./PRD.md)**
+- [Interactive prototype](https://anewpriya.github.io/klaro-energie-estimateur/)
+- [Original June 2026 PRD](PRD.md)
 
----
+## Scope
 
-## What it is
+Estimate electricity contract savings under a historical tariff scenario and screen for potential chèque énergie eligibility using household tax income and composition. Unknown and market contracts require a real tariff comparison. No live quotes, data collection, application submission or advisor booking.
 
-A standalone web tool that helps a Klaro user answer one question in under 2 minutes: *"Am I losing money on my energy bill?"*
+## Implementation
 
-![Klaro Energy Savings Estimator - Prototype Interface](Klaro.jpg)
+Standalone HTML, CSS and JavaScript. Open index.html in a browser. Run `node tests/estimate.test.mjs` with Node 22.
 
-It covers two distinct angles:
+The revised estimator includes input validation, household-specific benefit bands, zero-income handling and official service links. The original PRD and screenshot describe the initial version, not the revised implementation.
 
-1. **Contract comparison** — estimates the gap between the user's current regulated tariff (TRV EDF, CRE reference June 2026) and competitive market offers, based on their consumption profile.
+## Assumptions and limitations
 
-2. **Chèque énergie eligibility** — automatically checks eligibility against the official 2026 government scale (RFR/UC threshold ≤ €11,000, benefit value €48–277/year), directly aligned with Klaro's anti non-recours mission.
+The electricity rates (€0.194 and €0.17/kWh) are historical illustrative assumptions, not current offers. The calculation assumes identical subscription costs. Consumption is estimated from floor area and heating type. Chèque énergie screening uses simplified tax-household composition and 2024 reference income for the 2026 campaign; actual eligibility and prior benefit receipt must be checked through the [official service](https://www.chequeenergie.gouv.fr/). Compare current electricity offers via [Énergie-Info](https://comparateur-offres.energie-info.fr/).
 
-The tool UI is in French because that's the language of the end user. The documentation is in English.
-
----
-
-## Why this scope
-
-Klaro launched a bill-reduction comparator (energy, telecoms, insurance) as part of their platform in late 2025. This prototype explores the underlying eligibility logic for the energy module, specifically how contract comparison and chèque énergie detection could work together in a single transparent, non-brokered flow.
-
-Scope was deliberately kept narrow to stay honest: no live supplier API connections, no subscription flow. The goal is the investigation decision — "is it worth looking into my contract?" — not the quote itself.
-
----
-
-## Tech stack
-
-Zero dependencies. Pure HTML + CSS + vanilla JavaScript, single `index.html` file.
-
-This is a deliberate choice: the product logic (5 inputs, RFR/UC calculation, tariff segmentation) is readable directly in the source without a build environment, framework, or npm. Any developer can read and critique the business logic in 5 minutes.
-
----
-
-## Repo structure
-
-```
-/
-├── index.html   # The working prototype (fully standalone)
-├── PRD.md       # Product Requirements Document — logic, scope, metrics
-└── README.md    # This file
-```
-
----
-
-## Data sources
-
-All figures used in calculations are public and explicitly cited in the PRD and in the tool's source note.
-
-| Data point | Value | Source |
-|---|---|---|
-| Regulated tariff (Base, 6 kVA) | €0.194/kWh incl. tax | CRE deliberation no. 2026-06 |
-| Annual TRV subscription | €187.80 | EDF / CRE, June 2026 |
-| Competitive market offer floor | < €0.17/kWh | Selectra / papernest, June 2026 |
-| Chèque énergie eligibility threshold | €11,000/UC (reference tax income) | économie.gouv.fr, 2026 scale |
-| Chèque énergie benefit value | €48–277/year | économie.gouv.fr, 2026 scale |
-
----
-
-## Known limitations
-
-- Consumption estimates (kWh/m²) are indicative averages, not individual measurements from the Enedis Datahub API — a v2 integration would improve per-user accuracy significantly.
-- Contract savings range is indicative (public market floor), not a personalised real-time quote.
-- The chèque énergie eligibility check is accurate against the 2026 official scale, but actual entitlement depends on the tax authority's cross-referencing of fiscal data with the household's PDL.
-
----
-
-## Disclaimer
-
-This prototype is an independent job application exercise. It does not reproduce any proprietary Klaro assets and uses no internal company data. The visual design is freely inspired by klaro.fr's design direction (palette, typography, tone) for the purpose of demonstrating design empathy.
+No live user validation or realised savings are claimed. Not affiliated with Klaro.
