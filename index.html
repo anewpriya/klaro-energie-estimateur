@@ -13,7 +13,7 @@
     --green:#0F6E45;
     --green-deep:#0A4F32;
     --green-pale:#E3F1E6;
-    --coral:#D9643C;
+    --coral:#A74627;
     --coral-pale:#FBEAE2;
     --line:#E7E2D6;
     --radius:16px;
@@ -202,6 +202,7 @@
     font-size:14px;
   }
   .cta-card{
+    margin-top:20px;
     text-align:center;
     padding:24px;
   }
@@ -239,9 +240,10 @@
 
   <span class="eyebrow">Prototype produit — non affilié à Klaro</span>
   <h1>Ta facture d'énergie cache peut-être un gain.</h1>
-  <p class="lede">Réponds à 5 questions. On regarde si tu es éligible au chèque énergie et si ton contrat actuel te coûte plus cher que nécessaire.</p>
+  <p class="lede">Réponds à 5 questions. Explore une estimation historique de tes économies et de ton éligibilité potentielle au chèque énergie.</p>
 
   <form class="card" id="formCard">
+<p class="hint">Simulation indicative, basée sur des tarifs historiques. Tes réponses restent dans cette page et ne sont ni enregistrées par ce prototype ni transmises à un conseiller.</p>
     <div class="field">
       <label for="contractType">Quel est ton contrat d'électricité aujourd'hui ?</label>
       <select id="contractType" required>
@@ -274,7 +276,8 @@
       </div>
       <div class="field">
         <label for="income">Revenu fiscal de référence 2024 (€/an)</label>
-        <input type="number" id="income" required step="any" placeholder="Ex. 22000" min="0">
+        <input type="number" id="income" aria-describedby="incomeHelp" required step="any" placeholder="Ex. 22000" min="0">
+<p class="hint" id="incomeHelp">Tu trouveras ton RFR 2024 sur ton avis d’impôt 2025.</p>
       </div>
     </div>
 
