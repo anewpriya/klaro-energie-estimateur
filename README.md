@@ -5,6 +5,13 @@ Independent product prototype created for a Junior Product Manager application. 
 - [Interactive prototype](https://anewpriya.github.io/klaro-energie-estimateur/)
 - [Original June 2026 PRD](PRD.md)
 
+
+## Project preview
+
+![French-language estimator form with fictional household inputs](klaro-form.png)
+
+![Illustrative energy savings and potential assistance breakdown](klaro-results.png)
+
 ## Scope
 
 Estimate electricity contract savings under a historical tariff scenario and screen for potential chèque énergie eligibility using household tax income and composition. Unknown and market contracts require a real tariff comparison. No live quotes, data collection, application submission or advisor booking.
